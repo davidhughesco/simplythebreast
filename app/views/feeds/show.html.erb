@@ -2,7 +2,7 @@
 
 <p>
   <strong>Start:</strong>
-  <%= @feed.start %>
+  <%= @feed.created_at %>
 </p>
 
 <p>
@@ -12,7 +12,7 @@
 
 <p>
   <strong>Breast:</strong>
-  <%= @feed.breast %>
+  <%= rightleft(@feed.breast) %>
 </p>
 
 <p>

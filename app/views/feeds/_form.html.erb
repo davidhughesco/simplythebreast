@@ -1,37 +1,87 @@
 <%= form_with(model: feed, local: true) do |form| %>
-  <% if feed.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(feed.errors.count, "error") %> prohibited this feed from being saved:</h2>
 
-      <ul>
-      <% feed.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <div class="chest">
+    <div class="breast" id="left">
+      <div class="areola">
+        <div class="nipple">
+        </div>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :start %>
-    <%= form.datetime_select :start %>
+    <div class="breast" id="right">
+      <div class="areola">
+        <div class="nipple">
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :end %>
-    <%= form.datetime_select :end %>
+  <div id="time">
+      <span id="minutes">0</span>:<span id="seconds">00</span>
   </div>
 
-  <div class="field">
-    <%= form.label :breast %>
-    <%= form.check_box :breast %>
-  </div>
+  <%= form.submit "Stop", id: "stopBtn" %>
 
-  <div class="field">
-    <%= form.label :time %>
+  <div style="display:none">
+    <%= form.datetime_select :start %><br>
+    <%= form.datetime_select :end %><br>
+    <%= form.check_box :breast %><br>
     <%= form.number_field :time %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
-  </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#right').css('opacity','0.5');
+  });
+  $('#left').click(function(){
+    $('#feed_breast').prop('checked', false);
+    $('.breast').css('opacity','0.5');
+    $(this).css('opacity','1');
+  });
+  $('#right').click(function(){
+    $('#feed_breast').prop('checked', true);
+    $('.breast').css('opacity','0.5');
+    $(this).css('opacity','1');
+  });
+  // STOPWATCH
+  $(function() {
+
+    var hours = minutes = seconds = milliseconds = 0;
+    var prev_hours = prev_minutes = prev_seconds = prev_milliseconds = undefined;
+    var timeUpdate;
+
+    $(document).ready(function(){
+      updateTime(0,0,0,0);
+    });
+
+    // Update time in stopwatch periodically - every 25ms
+    function updateTime(prev_minutes, prev_seconds){
+        var startTime = new Date();    // fetch current time
+        timeUpdate = setInterval(function () {
+            var timeElapsed = new Date().getTime() - startTime.getTime();    // calculate the time elapsed in milliseconds
+            // calculate minutes
+            minutes = parseInt(timeElapsed / 1000 / 60) + prev_minutes;
+            if (minutes > 60) minutes %= 60;
+            // calculate seconds
+            seconds = parseInt(timeElapsed / 1000) + prev_seconds;
+            if (seconds > 60) seconds %= 60;
+            // set the stopwatch
+            setStopwatch(minutes, seconds);
+        }, 25); // update time in stopwatch after every 25ms
+
+    }
+
+    // Set the time in stopwatch
+    function setStopwatch(minutes, seconds){
+        $("#minutes").html(prependZero(minutes, 1));
+        $("#seconds").html(prependZero(seconds, 2));
+    }
+
+    // Prepend zeros to the digits in stopwatch
+    function prependZero(time, length) {
+        time = new String(time);    // stringify time
+        return new Array(Math.max(length - time.length + 1, 0)).join("0") + time;
+    }
+});
+</script>

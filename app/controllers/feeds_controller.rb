@@ -4,7 +4,7 @@ class FeedsController < ApplicationController
   # GET /feeds
   # GET /feeds.json
   def index
-    @feeds = Feed.all
+    @feeds = Feed.all.order(id: :desc)
   end
 
   # GET /feeds/1
@@ -15,6 +15,8 @@ class FeedsController < ApplicationController
   # GET /feeds/new
   def new
     @feed = Feed.new
+    @feed.save
+    redirect_to edit_feed_path(@feed)
   end
 
   # GET /feeds/1/edit
@@ -25,30 +27,18 @@ class FeedsController < ApplicationController
   # POST /feeds.json
   def create
     @feed = Feed.new(feed_params)
-
-    respond_to do |format|
-      if @feed.save
-        format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
-        format.json { render :show, status: :created, location: @feed }
-      else
-        format.html { render :new }
-        format.json { render json: @feed.errors, status: :unprocessable_entity }
-      end
-    end
+    @feed.save
+    redirect_to feeds_path
   end
 
   # PATCH/PUT /feeds/1
   # PATCH/PUT /feeds/1.json
   def update
-    respond_to do |format|
-      if @feed.update(feed_params)
-        format.html { redirect_to @feed, notice: 'Feed was successfully updated.' }
-        format.json { render :show, status: :ok, location: @feed }
-      else
-        format.html { render :edit }
-        format.json { render json: @feed.errors, status: :unprocessable_entity }
-      end
-    end
+    @feed.update(feed_params)
+    # @feed.time = ((@feed.end - @feed.created_at) / 60).round.to_i
+    @feed.end = DateTime.current
+    @feed.save
+    redirect_to feeds_path
   end
 
   # DELETE /feeds/1

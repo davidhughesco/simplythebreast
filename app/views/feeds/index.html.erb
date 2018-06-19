@@ -5,7 +5,7 @@
 <% @feeds.each do |feed| %>
 <div class="feed">
   <span><%= link_to '&#10005;'.html_safe, feed, method: :delete, data: { confirm: 'Are you sure?' }, class: "delete" %></span>
-  <p class="meta"><%= feed.end.strftime('%a %H:%M') %></p>
+  <p class="meta"><%= feed.created_at.strftime('%a %H:%M') %></p>
   <h2><%= rightleft(feed.breast) %></h2>
   <p><%= feed.set_time %> mins</p>
 </div>

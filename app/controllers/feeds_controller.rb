@@ -5,6 +5,7 @@ class FeedsController < ApplicationController
   # GET /feeds.json
   def index
     @feeds = Feed.all.order(id: :desc)
+    @feed = Feed.new
   end
 
   # GET /feeds/1
@@ -16,7 +17,8 @@ class FeedsController < ApplicationController
   def new
     @feed = Feed.new
     @feed.save
-    redirect_to edit_feed_path(@feed)
+    # redirect_to edit_feed_path(@feed)
+    redirect_to feeds_path
   end
 
   # GET /feeds/1/edit

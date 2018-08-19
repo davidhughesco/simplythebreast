@@ -1,12 +1,54 @@
-<div class="start">
+<!-- <div class="start">
   <%= link_to 'Start', new_feed_path, id: "stopBtn" %>
+</div> -->
+
+<div id="indexForm">
+  <%= form_for(@feed) do |form| %>
+    <div class="chest">
+      <div class="breast" id="left">
+        <div class="areola">
+          <div class="nipple">
+          </div>
+        </div>
+      </div>
+      <div class="breast" id="right">
+        <div class="areola">
+          <div class="nipple">
+          </div>
+        </div>
+      </div>
+    </div>
+    <%= form.submit "Log", id: "stopBtn" %>
+    <div style="display:none">
+      <%= form.datetime_select :start %><br>
+      <%= form.datetime_select :end %><br>
+      <%= form.check_box :breast %><br>
+      <%= form.number_field :time %>
+    </div>
+  <% end %>
 </div>
 
-<% @feeds.each do |feed| %>
-<div class="feed">
+<% @feeds.each_with_index do |feed, i| %>
+<div class="feed" id="feed<%= i %>">
   <span><%= link_to '&#10005;'.html_safe, feed, method: :delete, data: { confirm: 'Are you sure?' }, class: "delete" %></span>
   <p class="meta"><%= feed.created_at.strftime('%a %H:%M') %></p>
   <h2><%= rightleft(feed.breast) %></h2>
-  <p><%= feed.set_time %> mins</p>
+  <!-- <p><%= feed.set_time %> mins</p> -->
 </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#right').css('opacity','0.5');
+  });
+  $('#left').click(function(){
+    $('#feed_breast').prop('checked', false);
+    $('.breast').css('opacity','0.5');
+    $(this).css('opacity','1');
+  });
+  $('#right').click(function(){
+    $('#feed_breast').prop('checked', true);
+    $('.breast').css('opacity','0.5');
+    $(this).css('opacity','1');
+  });
+</script>

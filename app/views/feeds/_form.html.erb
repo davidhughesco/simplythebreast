@@ -16,10 +16,11 @@
   </div>
 
   <div id="time">
-      <span id="minutes">0</span>:<span id="seconds">00</span>
+      <%= feed.created_at.strftime('%H:%M') %>
+      <!-- <span id="minutes">0</span>:<span id="seconds">00</span> -->
   </div>
 
-  <%= form.submit "Stop", id: "stopBtn" %>
+  <%= form.submit "Log", id: "stopBtn" %>
 
   <div style="display:none">
     <%= form.datetime_select :start %><br>
